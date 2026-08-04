@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String      @id @default(uuid())
+  clerkId    String      @unique
+  email      String      @unique
+  name       String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  projects   Project[]
+  recordings Recording[]
+  presets    Preset[]
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  title       String   @default("Untitled Project")
+  bpm         Int      @default(120)
+  instrument  String   @default("grand-piano")
+  notesJson   String   @db.Text // Serialized Piano Roll Notes Array
+  drumsJson   String   @db.Text // Serialized 16-Step Drum Grid Array
+  fxSettings  String   @db.Text // Serialized FX chain parameters
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Recording {
+  id         String   @id @default(uuid())
+  title      String   @default("New Recording")
+  duration   Float    // In seconds
+  audioUrl   String?  // Storage URL or Base64 data
+  midiData   String?  @db.Text // Base64 or JSON MIDI events
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+}
+
+model Preset {
+  id          String   @id @default(uuid())
+  name        String
+  category    String   @default("synth") // synth, piano, pad, fx
+  configJson  String   @db.Text
+  isPublic    Boolean  @default(false)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+}

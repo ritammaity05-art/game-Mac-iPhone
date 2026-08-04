@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AirGamePad - Wireless Mobile Game Controller</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+
+  <div class="hero-container">
+    <div class="brand-header">
+      <div class="brand-logo gradient-text">AirGamePad</div>
+      <div class="brand-sub">Turn your iPhone into a Wireless Controller for your MacBook</div>
+    </div>
+
+    <div class="action-cards">
+      <!-- Option 1: Host Game on MacBook -->
+      <a href="/game.html" class="card-option glass-panel glass-panel-glow">
+        <div class="card-icon">💻</div>
+        <div class="card-title">Host Game (MacBook)</div>
+        <div class="card-desc">Launch the 60 FPS arcade game on your laptop. Displays Room Code & QR code for fast pairing.</div>
+        <button class="btn">Launch Game Host</button>
+      </a>
+
+      <!-- Option 2: Connect Mobile Controller -->
+      <div class="card-option glass-panel" onclick="openJoinModal()">
+        <div class="card-icon">📱</div>
+        <div class="card-title">Join as Controller (Phone)</div>
+        <div class="card-desc">Open the virtual gamepad on your phone. Enter 6-digit Room Code or scan QR code.</div>
+        <button class="btn btn-secondary">Open Controller</button>
+      </div>
+    </div>
+
+    <div style="margin-top: 50px;">
+      <span class="status-badge" id="server-status-pill">
+        <span class="dot" id="server-dot"></span>
+        <span id="server-status-text">Detecting Server...</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Room Code Join Modal -->
+  <div class="modal-overlay" id="join-modal">
+    <div class="modal-body glass-panel glass-panel-glow">
+      <h2 class="neon-text" style="margin-bottom: 15px;">Enter Room Code</h2>
+      <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">Enter the 6-digit pairing code shown on your MacBook screen.</p>
+      
+      <input type="text" id="room-code-input" maxlength="6" placeholder="582913" 
+             style="width: 100%; padding: 16px; font-family: var(--font-mono); font-size: 2rem; text-align: center; letter-spacing: 8px; border-radius: var(--radius-md); border: 2px solid var(--primary-cyan); background: rgba(0,0,0,0.5); color: #fff; outline: none; margin-bottom: 25px;">
+      
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="btn btn-secondary" onclick="closeJoinModal()">Cancel</button>
+        <button class="btn" onclick="submitRoomCode()">Connect Now</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/socket.js"></script>
+  <script>
+    // Index page inline scripts
+    const socket = io();
+
+    socket.on('connect', () => {
+      document.getElementById('server-dot').className = 'dot connected';
+      document.getElementById('server-status-text').innerText = 'Socket.io Connected (' + socket.id + ')';
+    });
+
+    socket.on('disconnect', () => {
+      document.getElementById('server-dot').className = 'dot disconnected';
+      document.getElementById('server-status-text').innerText = 'Server Disconnected';
+    });
+
+    function openJoinModal() {
+      document.getElementById('join-modal').classList.add('active');
+      document.getElementById('room-code-input').focus();
+    }
+
+    function closeJoinModal() {
+      document.getElementById('join-modal').classList.remove('active');
+    }
+
+    function submitRoomCode() {
+      const code = document.getElementById('room-code-input').value.trim();
+      if (code.length === 6) {
+        window.location.href = `/controller.html?room=${code}`;
+      } else {
+        alert('Please enter a valid 6-digit room code.');
+      }
+    }
+  </script>
+
+</body>
+</html>

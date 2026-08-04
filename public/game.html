@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AirGamePad - MacBook Arcade Game Host</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/game.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body class="game-body">
+
+  <!-- HUD Bar -->
+  <div class="hud-bar">
+    <div class="hud-group">
+      <div class="hud-item glass-panel">
+        <div class="hud-label">Health</div>
+        <div class="health-bar-bg">
+          <div class="health-bar-fill" id="hud-health-fill"></div>
+        </div>
+      </div>
+
+      <div class="hud-item glass-panel">
+        <div class="hud-label">Score</div>
+        <div class="hud-value" id="hud-score">000000</div>
+      </div>
+
+      <div class="hud-item glass-panel">
+        <div class="hud-label">Coins</div>
+        <div class="hud-value" id="hud-coins" style="color: var(--accent-yellow);">🪙 0</div>
+      </div>
+    </div>
+
+    <div class="hud-group">
+      <div class="hud-item glass-panel">
+        <div class="hud-label">FPS</div>
+        <div class="hud-value" id="hud-fps">60</div>
+      </div>
+
+      <div class="hud-item glass-panel">
+        <div class="hud-label">Latency</div>
+        <div class="hud-value" id="hud-ping">-- ms</div>
+      </div>
+
+      <span class="status-badge" id="game-status-badge">
+        <span class="dot disconnected" id="game-status-dot"></span>
+        <span id="game-status-text">Waiting for Controller</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Main Game Canvas Container -->
+  <div id="game-container">
+    <canvas id="game-canvas" width="1280" height="720"></canvas>
+  </div>
+
+  <!-- Room Pairing Overlay -->
+  <div class="pairing-overlay" id="pairing-overlay">
+    <div class="pairing-box glass-panel glass-panel-glow">
+      <div class="gradient-text" style="font-size: 2.2rem; font-weight: 900;">Pair iPhone Controller</div>
+      <p style="color: var(--text-muted); font-size: 1rem;">Open safari or chrome on your phone and connect to this MacBook</p>
+
+      <div class="room-code-display" id="display-room-code">------</div>
+
+      <img id="qr-code-img" class="qr-code-img" src="" alt="Pairing QR Code">
+
+      <div class="instruction-steps">
+        <div>1. Connect iPhone to same Wi-Fi network</div>
+        <div>2. Scan QR Code or open <strong id="display-local-url" style="color: var(--primary-cyan);">http://...</strong></div>
+        <div>3. Enter 6-digit code <strong id="display-code-inline" style="color: var(--primary-cyan);">------</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Secret Admin Dashboard Overlay (Ctrl + Shift + A) -->
+  <div class="admin-panel" id="admin-panel">
+    <div class="admin-header">
+      <div class="admin-title">⚡ AirGamePad Admin Telemetry</div>
+      <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="toggleAdminPanel(false)">Close (Esc)</button>
+    </div>
+
+    <div class="admin-grid">
+      <div class="admin-metric">
+        <span>Room Code</span>
+        <strong id="admin-room-id">------</strong>
+      </div>
+      <div class="admin-metric">
+        <span>Connected Devices</span>
+        <strong id="admin-devices-count">0</strong>
+      </div>
+      <div class="admin-metric">
+        <span>Input Events/Sec</span>
+        <strong id="admin-events-rate">0 /s</strong>
+      </div>
+      <div class="admin-metric">
+        <span>Socket Latency</span>
+        <strong id="admin-latency">0 ms</strong>
+      </div>
+      <div class="admin-metric">
+        <span>Game FPS</span>
+        <strong id="admin-fps">60 FPS</strong>
+      </div>
+      <div class="admin-metric">
+        <span>Local IP Server</span>
+        <strong id="admin-local-ip">127.0.0.1:3000</strong>
+      </div>
+    </div>
+
+    <div>
+      <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Active Controller Inputs:</span>
+      <div class="active-buttons-bar" id="admin-active-buttons">
+        <span class="active-btn-pill" style="background: rgba(255,255,255,0.1); color: var(--text-muted);">None</span>
+      </div>
+    </div>
+
+    <div>
+      <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Live Socket Event Logs:</span>
+      <div class="admin-log-box" id="admin-logs">
+        <div class="admin-log-entry">[SYSTEM] Admin Telemetry initialized.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/socket.js"></script>
+  <script src="/js/game.js"></script>
+</body>
+</html>

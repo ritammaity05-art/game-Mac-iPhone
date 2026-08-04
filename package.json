@@ -1,0 +1,26 @@
+{
+  "name": "airgamepad",
+  "version": "1.0.0",
+  "description": "Wireless iPhone/Mobile Game Controller for MacBook & PC Browser Games using Socket.io",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "socket.io",
+    "gamepad",
+    "mobile-controller",
+    "iphone",
+    "macbook",
+    "game-controller",
+    "web-audio"
+  ],
+  "author": "AirGamePad Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.22.2",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.8.3"
+  }
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>AirGamePad - iPhone Game Controller</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/controller.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body class="controller-body" id="controller-body">
+
+  <!-- Top Telemetry Header -->
+  <div class="controller-header">
+    <div class="controller-info-group">
+      <span class="status-badge" id="ctrl-status-badge">
+        <span class="dot disconnected" id="ctrl-dot"></span>
+        <span id="ctrl-status-text">Disconnected</span>
+      </span>
+
+      <span class="room-pill" id="ctrl-room-pill" onclick="promptRoomCode()" style="cursor: pointer;">ROOM: ------ ✏️</span>
+    </div>
+
+    <div class="controller-info-group">
+      <div class="telemetry-item">
+        🔋 <span id="ctrl-battery">--%</span>
+      </div>
+
+      <div class="telemetry-item">
+        ⚡ <span id="ctrl-ping">-- ms</span>
+      </div>
+
+      <select id="theme-select" class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 6px;">
+        <option value="default">Cyberpunk</option>
+        <option value="xbox">Xbox</option>
+        <option value="playstation">PlayStation</option>
+        <option value="synthwave">Synthwave</option>
+      </select>
+
+      <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="toggleFullscreen()">FS</button>
+    </div>
+  </div>
+
+  <!-- Room Code Prompt Overlay (If not connected) -->
+  <div class="modal-overlay active" id="room-prompt-modal">
+    <div class="modal-body glass-panel glass-panel-glow">
+      <h2 class="neon-text" style="margin-bottom: 10px;">Pair With MacBook</h2>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Enter 6-digit Room Code displayed on MacBook screen:</p>
+      
+      <input type="text" id="mobile-room-input" maxlength="6" placeholder="582913" 
+             style="width: 100%; padding: 12px; font-family: var(--font-mono); font-size: 1.8rem; text-align: center; letter-spacing: 6px; border-radius: var(--radius-md); border: 2px solid var(--primary-cyan); background: #000; color: #fff; outline: none; margin-bottom: 18px;">
+      
+      <button class="btn" style="width: 100%;" onclick="submitMobileRoomCode()">Connect Controller 🎮</button>
+    </div>
+  </div>
+
+  <!-- Gamepad Buttons Container -->
+  <div class="gamepad-container">
+
+    <!-- Left Triggers (L1, L2) -->
+    <div class="trigger-row-left">
+      <div class="btn-trigger" id="btn-L2" data-btn="L2">L2</div>
+      <div class="btn-trigger" id="btn-L1" data-btn="L1">L1</div>
+    </div>
+
+    <!-- Right Triggers (R1, R2) -->
+    <div class="trigger-row-right">
+      <div class="btn-trigger" id="btn-R1" data-btn="R1">R1</div>
+      <div class="btn-trigger" id="btn-R2" data-btn="R2">R2</div>
+    </div>
+
+    <!-- Center System Control Cluster -->
+    <div class="center-control-cluster">
+      <div class="system-btn-row">
+        <div class="btn-sys" id="btn-SELECT" data-btn="SELECT">SELECT</div>
+        <div class="btn-sys" id="btn-START" data-btn="START">START</div>
+      </div>
+
+      <div class="system-btn-row">
+        <div class="btn-sys" id="btn-TURBO" data-btn="TURBO">TURBO</div>
+        <div class="btn-sys" id="btn-PAUSE" data-btn="PAUSE">PAUSE</div>
+        <div class="btn-sys" id="btn-HOME" data-btn="HOME">HOME</div>
+      </div>
+
+      <div class="system-btn-row" style="margin-top: 6px;">
+        <button class="btn btn-secondary" id="btn-motion-toggle" style="padding: 4px 8px; font-size: 0.7rem;" onclick="toggleMotionSensors()">Gyro: OFF</button>
+        <button class="btn btn-secondary" id="btn-touchpad-toggle" style="padding: 4px 8px; font-size: 0.7rem;" onclick="toggleTouchpadMode()">Touchpad</button>
+        <button class="btn btn-secondary" id="btn-dpad-toggle" style="padding: 4px 8px; font-size: 0.7rem;" onclick="toggleDpadLayout()">D-Pad Mode</button>
+      </div>
+    </div>
+
+    <!-- Left Control Zone: 360° Analog Joystick & D-Pad -->
+    <div class="left-control-zone">
+      <div class="joystick-base" id="joystick-base">
+        <div class="joystick-stick" id="joystick-stick"></div>
+      </div>
+
+      <div class="dpad-container" id="dpad-container">
+        <div class="dpad-btn dpad-up" id="btn-DPAD_UP" data-btn="DPAD_UP">▲</div>
+        <div class="dpad-btn dpad-down" id="btn-DPAD_DOWN" data-btn="DPAD_DOWN">▼</div>
+        <div class="dpad-btn dpad-left" id="btn-DPAD_LEFT" data-btn="DPAD_LEFT">◀</div>
+        <div class="dpad-btn dpad-right" id="btn-DPAD_RIGHT" data-btn="DPAD_RIGHT">▶</div>
+      </div>
+    </div>
+
+    <!-- Right Control Zone: Action Buttons (A, B, X, Y) -->
+    <div class="right-control-zone">
+      <div class="abxy-cluster">
+        <div class="btn-action btn-y" id="btn-Y" data-btn="Y">Y</div>
+        <div class="btn-action btn-x" id="btn-X" data-btn="X">X</div>
+        <div class="btn-action btn-b" id="btn-B" data-btn="B">B</div>
+        <div class="btn-action btn-a" id="btn-A" data-btn="A">A</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Touchpad Mode Surface Overlay -->
+  <div class="touchpad-area" id="touchpad-area">
+    <div style="text-align: center;">
+      <div style="font-weight: 800; font-size: 1.4rem; color: var(--primary-cyan); margin-bottom: 8px;">Touchpad Surface</div>
+      <div>Swipe 1 Finger: Move Cursor</div>
+      <div>Tap: Click | 2 Finger Swipe: Scroll</div>
+    </div>
+  </div>
+
+  <script src="/js/socket.js"></script>
+  <script src="/js/controller.js"></script>
+</body>
+</html>
