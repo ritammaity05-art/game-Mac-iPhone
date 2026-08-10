@@ -1,10 +1,10 @@
 import React, { useMemo, useEffect, useRef, useState } from 'react';
-import { generate88Keys, KEYBOARD_SHORTCUTS, MAC_EASY_MAP, BEGINNER_SONGS, getScaleNotes, getChordNotes } from '../../utils/musicTheory';
+import { generate88Keys, KEYBOARD_SHORTCUTS, MAC_EASY_MAP, BEGINNER_SONGS, getScaleNotes } from '../../utils/musicTheory';
 import { useStudioStore } from '../../store/useStudioStore';
 import { InstrumentId } from '../../types';
 import { midiManager } from '../../midi/midiManager';
 import { audioEngine } from '../../audio/engine';
-import { Sparkles, Play, Pause, BookOpen, Volume2 } from 'lucide-react';
+import { Sparkles, Play, Pause, BookOpen, Volume2, Zap, GraduationCap } from 'lucide-react';
 
 export const Piano: React.FC = () => {
   const {
@@ -15,15 +15,16 @@ export const Piano: React.FC = () => {
     setInstrument,
     octaveOffset,
     setOctaveOffset,
-    keyLabelMode,
-    setKeyLabelMode,
     selectedRoot,
     selectedScale,
-    setBpm,
     activeSongTitle,
     activeSongKeys,
     activeSongRhythm,
     loadActiveSong,
+    arpeggiatorEnabled,
+    toggleArpeggiator,
+    tutorModeEnabled,
+    toggleTutorMode,
   } = useStudioStore();
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -73,7 +74,6 @@ export const Piano: React.FC = () => {
     { id: 'pads', label: 'Ambient Pad', icon: '🌌' },
   ];
 
-  // Accompaniment Chords for Full Piano Performance (C Major, A Minor, F Major, G Major)
   const leftHandChords = [
     ['C3', 'E3', 'G3'],
     ['A2', 'C3', 'E3'],
@@ -81,7 +81,7 @@ export const Piano: React.FC = () => {
     ['G2', 'B2', 'D3'],
   ];
 
-  // Auto Play Engine with Left Hand Piano Chord Accompaniment
+  // Auto Play Engine
   const startAutoPlay = async () => {
     await audioEngine.startAudioContext();
     if (isAutoPlaying) {
@@ -106,12 +106,11 @@ export const Piano: React.FC = () => {
 
       setAutoPlayNoteIndex(idx);
 
-      // Trigger Left-Hand Piano Chord Accompaniment every 4 notes for rich piano sound
       if (leftHandChordsEnabled && idx % 4 === 0) {
         const chordNotes = leftHandChords[chordIndex % leftHandChords.length];
         chordIndex++;
         chordNotes.forEach((cn) => {
-          noteOn(cn, 0.55); // Softer left-hand bass
+          noteOn(cn, 0.55);
           setTimeout(() => noteOff(cn), 1400);
         });
       }
@@ -155,7 +154,7 @@ export const Piano: React.FC = () => {
     return () => stopAutoPlay();
   }, [activeSongTitle]);
 
-  // Mac Computer Keyboard Event Listeners
+  // Mac Keyboard Listener
   useEffect(() => {
     const pressedKeys = new Set<string>();
 
@@ -251,41 +250,43 @@ export const Piano: React.FC = () => {
           </div>
         </div>
 
-        {/* Playback Controls & Left Hand Accompaniment Toggle */}
-        <div className="flex items-center gap-3">
+        {/* Pro Arpeggiator & Tutor Mode Toggles */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleArpeggiator}
+            className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition flex items-center gap-1 border ${
+              arpeggiatorEnabled
+                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/40 animate-pulse'
+                : 'bg-studio-surfaceLight text-slate-400 hover:text-slate-200 border-studio-border'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>{arpeggiatorEnabled ? 'ARPEGGIATOR (ON)' : 'ARPEGGIATOR'}</span>
+          </button>
+
+          <button
+            onClick={toggleTutorMode}
+            className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition flex items-center gap-1 border ${
+              tutorModeEnabled
+                ? 'bg-gradient-to-r from-synth-cyan to-teal-400 text-slate-950 border-cyan-300 shadow-md shadow-cyan-500/40'
+                : 'bg-studio-surfaceLight text-slate-400 hover:text-slate-200 border-studio-border'
+            }`}
+          >
+            <GraduationCap className="w-3.5 h-3.5" />
+            <span>{tutorModeEnabled ? 'TUTOR (ON)' : 'TUTOR'}</span>
+          </button>
+
           {/* Left Hand Chord Backing Toggle */}
           <button
             onClick={() => setLeftHandChordsEnabled(!leftHandChordsEnabled)}
-            className={`px-3 py-1 rounded-xl text-xs font-bold transition border ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition border ${
               leftHandChordsEnabled
                 ? 'bg-synth-purple text-white border-synth-purple shadow'
                 : 'bg-studio-surfaceLight text-slate-400 border-studio-border'
             }`}
           >
-            {leftHandChordsEnabled ? '🎹 LEFT-HAND CHORDS (ON)' : 'MELODY ONLY'}
+            {leftHandChordsEnabled ? '🎹 LEFT-HAND CHORDS' : 'MELODY ONLY'}
           </button>
-
-          {/* Speed Selector */}
-          <div className="flex items-center gap-1 bg-studio-surface/90 border border-studio-border p-1 rounded-xl text-xs font-mono">
-            <span className="text-slate-400 px-1 font-bold">SPEED:</span>
-            {[
-              { label: '0.75x Slow', val: 0.75 },
-              { label: '1x Normal', val: 1.0 },
-              { label: '1.25x Fast', val: 1.25 },
-            ].map((spd) => (
-              <button
-                key={spd.label}
-                onClick={() => setPlaybackSpeed(spd.val)}
-                className={`px-2 py-0.5 rounded font-bold transition ${
-                  playbackSpeed === spd.val
-                    ? 'bg-synth-cyan text-slate-950 font-bold shadow'
-                    : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                {spd.label}
-              </button>
-            ))}
-          </div>
 
           {/* AUTO PLAY BUTTON */}
           <button
@@ -297,7 +298,7 @@ export const Piano: React.FC = () => {
             }`}
           >
             {isAutoPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
-            <span>{isAutoPlaying ? 'STOP PLAYING' : 'AUTO PLAY FULL SONG (Aap Bajao)'}</span>
+            <span>{isAutoPlaying ? 'STOP PLAYING' : 'AUTO PLAY FULL SONG'}</span>
           </button>
         </div>
 
@@ -320,90 +321,6 @@ export const Piano: React.FC = () => {
               {song.name}
             </button>
           ))}
-        </div>
-
-        {/* Song Keys Sequence Bar */}
-        <div className="flex items-center gap-1.5 bg-studio-bg/90 border border-studio-border/80 px-3 py-1.5 rounded-xl font-mono text-xs overflow-x-auto max-w-full">
-          <span className="text-slate-400 font-bold mr-1">MAC KEYS ({activeSongKeys.filter(k => k !== ' ').length}):</span>
-          {activeSongKeys.map((kKey, kIdx) => {
-            const isPlayingThisNote = isAutoPlaying && autoPlayNoteIndex === kIdx;
-            return (
-              <span
-                key={kIdx}
-                className={`px-2 py-0.5 rounded font-extrabold shadow transition-all ${
-                  kKey === ' '
-                    ? 'w-3'
-                    : isPlayingThisNote
-                    ? 'bg-amber-400 text-slate-950 scale-125 border-2 border-white shadow-amber-400/80 animate-bounce'
-                    : 'bg-gradient-to-r from-synth-cyan to-synth-purple text-slate-950 border border-white/40'
-                }`}
-              >
-                {kKey}
-              </span>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Instrument Switcher Bar */}
-      <div className="bg-studio-surface/80 border-b border-studio-border p-3 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full scrollbar-thin">
-          {instrumentsList.map((inst) => (
-            <button
-              key={inst.id}
-              onClick={() => setInstrument(inst.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
-                instrumentId === inst.id
-                  ? 'bg-gradient-to-r from-synth-purple to-synth-cyan text-white shadow-md shadow-purple-900/40 ring-1 ring-white/20 scale-105'
-                  : 'bg-studio-surfaceLight text-slate-400 hover:text-slate-200 hover:bg-studio-border'
-              }`}
-            >
-              <span>{inst.icon}</span>
-              <span>{inst.label}</span>
-            </button>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-3 text-xs font-medium">
-          <button
-            onClick={() => setEasyMacMode(!easyMacMode)}
-            className={`px-3 py-1 rounded-lg font-bold transition flex items-center gap-1.5 ${
-              easyMacMode
-                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md shadow-amber-500/30'
-                : 'bg-studio-surfaceLight text-slate-400 hover:text-slate-200 border border-studio-border'
-            }`}
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>{easyMacMode ? 'MAC EASY MODE (ON)' : 'CHROMATIC MODE'}</span>
-          </button>
-
-          <div
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md transition ${
-              sustainActive
-                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-sm shadow-emerald-900/30 animate-pulse'
-                : 'bg-studio-surfaceLight text-slate-400 border border-studio-border'
-            }`}
-          >
-            <span className="w-2 h-2 rounded-full bg-current" />
-            <span>SUSTAIN (SPACEBAR)</span>
-          </div>
-
-          <div className="flex items-center bg-studio-surfaceLight border border-studio-border rounded-md px-2 py-0.5 gap-1">
-            <span className="text-slate-400 font-mono mr-1">OCT:</span>
-            <button
-              onClick={() => setOctaveOffset(octaveOffset - 1)}
-              className="px-1.5 py-0.5 hover:bg-studio-border rounded font-bold text-slate-200"
-            >
-              -
-            </button>
-            <span className="font-mono text-synth-cyan w-4 text-center">{octaveOffset >= 0 ? `+${octaveOffset}` : octaveOffset}</span>
-            <button
-              onClick={() => setOctaveOffset(octaveOffset + 1)}
-              className="px-1.5 py-0.5 hover:bg-studio-border rounded font-bold text-slate-200"
-            >
-              +
-            </button>
-          </div>
         </div>
       </div>
 
@@ -435,14 +352,9 @@ export const Piano: React.FC = () => {
                     if (isMouseDown) noteOn(key.noteName, 0.9);
                   }}
                   onMouseLeave={() => noteOff(key.noteName)}
-                  onTouchStart={(e) => {
-                    e.preventDefault();
-                    noteOn(key.noteName, 0.9);
-                  }}
-                  onTouchEnd={() => noteOff(key.noteName)}
                   className={`absolute z-20 w-8 h-[210px] -ml-4 rounded-b-md cursor-pointer transition-all duration-75 flex flex-col justify-end items-center pb-3 ${
                     isActive
-                      ? 'bg-gradient-to-b from-purple-600 to-synth-cyan shadow-[0_0_20px_rgba(6,182,212,0.9)] translate-y-1.5 scale-95'
+                      ? 'bg-gradient-to-b from-purple-600 to-synth-cyan shadow-[0_0_25px_rgba(6,182,212,1)] translate-y-1.5 scale-95'
                       : isHighlightedInScale
                       ? 'bg-gradient-to-b from-slate-900 via-purple-950 to-slate-950 border-b-2 border-synth-purple shadow-md'
                       : 'bg-gradient-to-b from-slate-900 via-slate-950 to-black hover:bg-slate-800 border-b border-slate-700'
@@ -451,6 +363,11 @@ export const Piano: React.FC = () => {
                     left: `${(key.keyNumber - getWhiteKeyIndexOffset(key.keyNumber)) * 44}px`,
                   }}
                 >
+                  {isActive && tutorModeEnabled && (
+                    <span className="absolute -top-6 text-amber-300 font-bold text-sm animate-bounce">
+                      ♩
+                    </span>
+                  )}
                   {macShortcut && (
                     <span className="text-[9px] font-extrabold uppercase px-1 py-0.5 bg-slate-800 text-amber-300 rounded font-mono border border-slate-600 shadow">
                       {macShortcut}
@@ -473,19 +390,20 @@ export const Piano: React.FC = () => {
                   if (isMouseDown) noteOn(key.noteName, 0.85);
                 }}
                 onMouseLeave={() => noteOff(key.noteName)}
-                onTouchStart={(e) => {
-                  e.preventDefault();
-                  noteOn(key.noteName, 0.85);
-                }}
-                onTouchEnd={() => noteOff(key.noteName)}
-                className={`z-10 w-11 h-[320px] rounded-b-lg border-r border-l border-slate-300/20 cursor-pointer transition-all duration-75 flex flex-col justify-end items-center pb-4 select-none ${
+                className={`z-10 w-11 h-[320px] rounded-b-lg border-r border-l border-slate-300/20 cursor-pointer transition-all duration-75 flex flex-col justify-end items-center pb-4 select-none relative ${
                   isActive
-                    ? 'bg-gradient-to-b from-cyan-200 to-synth-purple shadow-[0_0_25px_rgba(139,92,246,0.8)] translate-y-2 scale-[0.98]'
+                    ? 'bg-gradient-to-b from-cyan-200 to-synth-purple shadow-[0_0_30px_rgba(139,92,246,1)] translate-y-2 scale-[0.98]'
                     : isHighlightedInScale
                     ? 'bg-gradient-to-b from-slate-100 via-purple-100 to-indigo-200 text-slate-950'
                     : 'bg-gradient-to-b from-slate-100 via-white to-slate-200 hover:from-slate-200 hover:to-slate-300 text-slate-900'
                 }`}
               >
+                {isActive && tutorModeEnabled && (
+                  <span className="absolute top-2 text-purple-600 font-bold text-base animate-bounce">
+                    ♫
+                  </span>
+                )}
+
                 {macShortcut && (
                   <span className="text-[12px] font-extrabold uppercase px-2 py-1 bg-amber-400 text-slate-950 rounded-lg font-mono shadow-md mb-2 border border-amber-500 scale-110">
                     [{macShortcut}]

@@ -19,6 +19,10 @@ interface StudioState {
   octaveOffset: number;
   keyLabelMode: 'notes' | 'octave' | 'shortcuts' | 'off';
 
+  // Pro Arpeggiator & Tutor Features
+  arpeggiatorEnabled: boolean;
+  tutorModeEnabled: boolean;
+
   // Active Song State for Auto-Play & Search
   activeSongTitle: string;
   activeSongKeys: string[];
@@ -44,6 +48,8 @@ interface StudioState {
   togglePlay: () => void;
   toggleRecord: () => void;
   toggleMetronome: () => void;
+  toggleArpeggiator: () => void;
+  toggleTutorMode: () => void;
   setProjectName: (name: string) => void;
   setOctaveOffset: (offset: number) => void;
   setKeyLabelMode: (mode: 'notes' | 'octave' | 'shortcuts' | 'off') => void;
@@ -83,7 +89,9 @@ export const useStudioStore = create<StudioState>((set, get) => ({
   octaveOffset: 0,
   keyLabelMode: 'notes',
 
-  // Active Song initialized to Tum Hi Ho
+  arpeggiatorEnabled: false,
+  tutorModeEnabled: true,
+
   activeSongTitle: HINDI_SONGS[0].name,
   activeSongKeys: HINDI_SONGS[0].keys,
   activeSongRhythm: HINDI_SONGS[0].rhythm || [],
@@ -103,21 +111,21 @@ export const useStudioStore = create<StudioState>((set, get) => ({
 
   fxConfig: {
     masterGain: 0.85,
-    reverbDecay: 2.5,
+    reverbDecay: 2.2,
     reverbWet: 0.2,
     delayTime: '8n',
-    delayFeedback: 0.35,
-    delayWet: 0.25,
-    chorusFreq: 1.5,
-    chorusWet: 0.15,
-    distortionDrive: 0.1,
+    delayFeedback: 0.2,
+    delayWet: 0.1,
+    chorusFreq: 1.2,
+    chorusWet: 0.08,
+    distortionDrive: 0.0,
     distortionWet: 0.0,
     filterCutoff: 18000,
     filterResonance: 1,
     filterType: 'lowpass',
-    eqLow: 0,
+    eqLow: 1,
     eqMid: 0,
-    eqHigh: 0,
+    eqHigh: 1,
     compressorThreshold: -20,
     compressorRatio: 4,
   },
@@ -131,6 +139,43 @@ export const useStudioStore = create<StudioState>((set, get) => ({
 
   noteOn: (note, velocity = 0.8) => {
     audioEngine.startAudioContext();
+
+    const { arpeggiatorEnabled } = get();
+
+    if (arpeggiatorEnabled) {
+      // Arpeggiator pattern: root -> +4 semitones -> +7 semitones -> +12 semitones
+      const match = note.match(/^([A-G]#?)(\d+)$/);
+      if (match) {
+        const pitches = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+        const rootIndex = pitches.indexOf(match[1]);
+        const oct = parseInt(match[2], 10);
+        const offsets = [0, 4, 7, 12];
+
+        offsets.forEach((semi, idx) => {
+          setTimeout(() => {
+            const arpIdx = (rootIndex + semi) % 12;
+            const arpOct = oct + Math.floor((rootIndex + semi) / 12);
+            const arpNote = `${pitches[arpIdx]}${arpOct}`;
+            instrumentManager.triggerAttack(arpNote, velocity);
+            set((state) => {
+              const next = new Set(state.activeNotes);
+              next.add(arpNote);
+              return { activeNotes: next };
+            });
+            setTimeout(() => {
+              instrumentManager.triggerRelease(arpNote);
+              set((state) => {
+                const next = new Set(state.activeNotes);
+                next.delete(arpNote);
+                return { activeNotes: next };
+              });
+            }, 180);
+          }, idx * 120);
+        });
+        return;
+      }
+    }
+
     instrumentManager.triggerAttack(note, velocity);
     set((state) => {
       const next = new Set(state.activeNotes);
@@ -161,12 +206,13 @@ export const useStudioStore = create<StudioState>((set, get) => ({
   togglePlay: () => set((state) => ({ isPlaying: !state.isPlaying })),
   toggleRecord: () => set((state) => ({ isRecording: !state.isRecording })),
   toggleMetronome: () => set((state) => ({ metronome: !state.metronome })),
+  toggleArpeggiator: () => set((state) => ({ arpeggiatorEnabled: !state.arpeggiatorEnabled })),
+  toggleTutorMode: () => set((state) => ({ tutorModeEnabled: !state.tutorModeEnabled })),
   setProjectName: (name) => set({ projectName: name }),
   setOctaveOffset: (offset) => set({ octaveOffset: Math.max(-3, Math.min(3, offset)) }),
   setKeyLabelMode: (mode) => set({ keyLabelMode: mode }),
 
   loadActiveSong: (title, keys, bpmVal = 90, rhythm) => {
-    // Generate Piano Roll Notes for full length song
     const rollNotes: PianoRollNote[] = [];
     let beatTime = 0;
 
