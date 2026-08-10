@@ -4,8 +4,8 @@
 
 @layer base {
   body {
-    @apply bg-[#080a0f] text-slate-100 antialiased overflow-hidden;
-    font-family: 'Inter', sans-serif;
+    @apply bg-[#06080d] text-slate-100 antialiased overflow-hidden select-none;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
@@ -14,23 +14,50 @@
   width: 6px;
   height: 6px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #090b12;
+  background: #080a0f;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: #2a3142;
+  background: #1f293d;
   border-radius: 4px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: #8b5cf6;
 }
 
-/* Glassmorphism helpers */
-.glass-panel {
-  background: rgba(17, 20, 29, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(42, 49, 66, 0.6);
+/* Cyberpunk Glassmorphism & Glow Effects */
+.daw-glass {
+  background: rgba(13, 16, 26, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.daw-card-glow {
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.neon-border-cyan {
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.35);
+  border-color: rgba(6, 182, 212, 0.6);
+}
+
+.neon-border-purple {
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.35);
+  border-color: rgba(139, 92, 246, 0.6);
+}
+
+@keyframes neon-pulse {
+  0%, 100% {
+    opacity: 0.8;
+    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.8));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 16px rgba(6, 182, 212, 1));
+  }
+}
+
+.animate-neon-pulse {
+  animation: neon-pulse 3s infinite ease-in-out;
 }
