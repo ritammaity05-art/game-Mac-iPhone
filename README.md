@@ -1,5 +1,9 @@
 # Piano Studio 🎹
 
+[![GitHub release](https://img.shields.io/badge/GitHub-Verified--Contribution-success?style=flat-square&logo=github)](https://github.com/ritammaity05-art/game-Mac-iPhone)
+[![React 19](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react)](https://react.dev/)
+[![Tone.js](https://img.shields.io/badge/Audio-Tone.js-purple?style=flat-square)](https://tonejs.github.io/)
+
 **Piano Studio** is a full-featured, production-ready Virtual Piano & Digital Audio Workstation (DAW) web application inspired by FL Studio, Ableton Live, Logic Pro, and Native Instruments. Built using **React 19, TypeScript, Vite, Tailwind CSS, Framer Motion, Zustand, Tone.js, Web Audio API, Web MIDI API, Express.js, and Prisma ORM**.
 
 ---
