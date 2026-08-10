@@ -81,8 +81,7 @@ export interface HindiSongInfo {
 }
 
 /**
- * EXACT REAL MUSICAL PITCHES FOR FAMOUS HINDI SONGS
- * Clean, crystal clear, 100% instantly recognizable tunes!
+ * MASTER SONG LIBRARY (Bollywood & World Classics)
  */
 export const HINDI_SONGS: HindiSongInfo[] = [
   {
@@ -92,45 +91,45 @@ export const HINDI_SONGS: HindiSongInfo[] = [
     keys: ['G#', 'A', 'G#', 'F#', 'E', 'F#', 'G#', ' ', 'G#', 'A', 'B', 'A', 'G#', 'F#', 'G#'],
     notes: 'Hum tere bin ab reh nahi sakte... Tere bina kya wajood mera...',
     rhythm: [
-      { key: 'G#', note: 'G#4', duration: 1.0, pauseAfter: 550 },  // Hum
-      { key: 'A',  note: 'A4',  duration: 0.5, pauseAfter: 350 },  // te-
-      { key: 'G#', note: 'G#4', duration: 1.2, pauseAfter: 600 },  // re
-      { key: 'F#', note: 'F#4', duration: 0.6, pauseAfter: 350 },  // bin
-      { key: 'E',  note: 'E4',  duration: 0.8, pauseAfter: 450 },  // ab
-      { key: 'F#', note: 'F#4', duration: 0.6, pauseAfter: 350 },  // reh
-      { key: 'G#', note: 'G#4', duration: 1.5, pauseAfter: 900 },  // nahi sakte...
+      { key: 'G#', note: 'G#4', duration: 1.0, pauseAfter: 550 },
+      { key: 'A',  note: 'A4',  duration: 0.5, pauseAfter: 350 },
+      { key: 'G#', note: 'G#4', duration: 1.2, pauseAfter: 600 },
+      { key: 'F#', note: 'F#4', duration: 0.6, pauseAfter: 350 },
+      { key: 'E',  note: 'E4',  duration: 0.8, pauseAfter: 450 },
+      { key: 'F#', note: 'F#4', duration: 0.6, pauseAfter: 350 },
+      { key: 'G#', note: 'G#4', duration: 1.5, pauseAfter: 900 },
       { key: ' ',  note: 'REST',duration: 0.0, pauseAfter: 700 },
-      { key: 'G#', note: 'G#4', duration: 1.0, pauseAfter: 500 },  // Te-
-      { key: 'A',  note: 'A4',  duration: 0.5, pauseAfter: 350 },  // re
-      { key: 'B',  note: 'B4',  duration: 1.2, pauseAfter: 600 },  // bi-
-      { key: 'A',  note: 'A4',  duration: 0.5, pauseAfter: 350 },  // na
-      { key: 'G#', note: 'G#4', duration: 0.8, pauseAfter: 450 },  // kya
-      { key: 'F#', note: 'F#4', duration: 0.6, pauseAfter: 350 },  // wa-
-      { key: 'G#', note: 'G#4', duration: 1.5, pauseAfter: 900 },  // jood mera...
+      { key: 'G#', note: 'G#4', duration: 1.0, pauseAfter: 500 },
+      { key: 'A',  note: 'A4',  duration: 0.5, pauseAfter: 350 },
+      { key: 'B',  note: 'B4',  duration: 1.2, pauseAfter: 600 },
+      { key: 'A',  note: 'A4',  duration: 0.5, pauseAfter: 350 },
+      { key: 'G#', note: 'G#4', duration: 0.8, pauseAfter: 450 },
+      { key: 'F#', note: 'F#4', duration: 0.6, pauseAfter: 350 },
+      { key: 'G#', note: 'G#4', duration: 1.5, pauseAfter: 900 },
     ],
   },
   {
     name: 'Kal Ho Naa Ho',
     movie: 'Kal Ho Naa Ho',
     bpm: 92,
-    keys: ['G', 'A', 'B', 'B', 'C5', 'B', 'A', 'G', ' ', 'G', 'A', 'B', 'D5', 'C5', 'B'],
+    keys: ['G', 'A', 'B', 'B', 'C', 'B', 'A', 'G', ' ', 'G', 'A', 'B', 'D', 'C', 'B'],
     notes: 'Har ghadi badal rahi hai roop zindagi... Chaav hai kabhi kabhi hai dhoop zindagi...',
     rhythm: [
-      { key: 'G',  note: 'G4',  duration: 0.8, pauseAfter: 400 },  // Har
-      { key: 'A',  note: 'A4',  duration: 0.8, pauseAfter: 400 },  // gha-
-      { key: 'B',  note: 'B4',  duration: 1.2, pauseAfter: 600 },  // di
-      { key: 'B',  note: 'B4',  duration: 0.6, pauseAfter: 350 },  // ba-
-      { key: 'C',  note: 'C5',  duration: 0.6, pauseAfter: 350 },  // dal
-      { key: 'B',  note: 'B4',  duration: 0.8, pauseAfter: 400 },  // ra-
-      { key: 'A',  note: 'A4',  duration: 0.8, pauseAfter: 400 },  // hi
-      { key: 'G',  note: 'G4',  duration: 1.5, pauseAfter: 900 },  // hai...
+      { key: 'G',  note: 'G4',  duration: 0.8, pauseAfter: 400 },
+      { key: 'A',  note: 'A4',  duration: 0.8, pauseAfter: 400 },
+      { key: 'B',  note: 'B4',  duration: 1.2, pauseAfter: 600 },
+      { key: 'B',  note: 'B4',  duration: 0.6, pauseAfter: 350 },
+      { key: 'C',  note: 'C5',  duration: 0.6, pauseAfter: 350 },
+      { key: 'B',  note: 'B4',  duration: 0.8, pauseAfter: 400 },
+      { key: 'A',  note: 'A4',  duration: 0.8, pauseAfter: 400 },
+      { key: 'G',  note: 'G4',  duration: 1.5, pauseAfter: 900 },
       { key: ' ',  note: 'REST',duration: 0.0, pauseAfter: 700 },
-      { key: 'G',  note: 'G4',  duration: 0.8, pauseAfter: 400 },  // Chaav
-      { key: 'A',  note: 'A4',  duration: 0.8, pauseAfter: 400 },  // hai
-      { key: 'B',  note: 'B4',  duration: 1.0, pauseAfter: 500 },  // ka-
-      { key: 'D',  note: 'D5',  duration: 1.2, pauseAfter: 600 },  // bhi
-      { key: 'C',  note: 'C5',  duration: 0.8, pauseAfter: 400 },  // dhoop
-      { key: 'B',  note: 'B4',  duration: 1.5, pauseAfter: 900 },  // zindagi...
+      { key: 'G',  note: 'G4',  duration: 0.8, pauseAfter: 400 },
+      { key: 'A',  note: 'A4',  duration: 0.8, pauseAfter: 400 },
+      { key: 'B',  note: 'B4',  duration: 1.0, pauseAfter: 500 },
+      { key: 'D',  note: 'D5',  duration: 1.2, pauseAfter: 600 },
+      { key: 'C',  note: 'C5',  duration: 0.8, pauseAfter: 400 },
+      { key: 'B',  note: 'B4',  duration: 1.5, pauseAfter: 900 },
     ],
   },
   {
@@ -140,14 +139,80 @@ export const HINDI_SONGS: HindiSongInfo[] = [
     keys: ['D', 'E', 'F#', 'G', 'F#', 'E', 'D', 'A', ' ', 'D', 'E', 'F#', 'A', 'G', 'F#', 'E'],
     notes: 'Kesariya tera ishq hai piya... Rang jaaun jo main haath lagaun...',
     rhythm: [
-      { key: 'D',  note: 'D4',  duration: 1.0, pauseAfter: 500 },  // Ke-
-      { key: 'E',  note: 'E4',  duration: 0.8, pauseAfter: 400 },  // sa-
-      { key: 'F#', note: 'F#4', duration: 1.2, pauseAfter: 600 },  // ri-
-      { key: 'G',  note: 'G4',  duration: 0.6, pauseAfter: 350 },  // ya
-      { key: 'F#', note: 'F#4', duration: 0.8, pauseAfter: 400 },  // te-
-      { key: 'E',  note: 'E4',  duration: 0.6, pauseAfter: 350 },  // ra
-      { key: 'D',  note: 'D4',  duration: 0.8, pauseAfter: 400 },  // ishq
-      { key: 'A',  note: 'A4',  duration: 1.5, pauseAfter: 900 },  // hai piya...
+      { key: 'D',  note: 'D4',  duration: 1.0, pauseAfter: 500 },
+      { key: 'E',  note: 'E4',  duration: 0.8, pauseAfter: 400 },
+      { key: 'F#', note: 'F#4', duration: 1.2, pauseAfter: 600 },
+      { key: 'G',  note: 'G4',  duration: 0.6, pauseAfter: 350 },
+      { key: 'F#', note: 'F#4', duration: 0.8, pauseAfter: 400 },
+      { key: 'E',  note: 'E4',  duration: 0.6, pauseAfter: 350 },
+      { key: 'D',  note: 'D4',  duration: 0.8, pauseAfter: 400 },
+      { key: 'A',  note: 'A4',  duration: 1.5, pauseAfter: 900 },
+    ],
+  },
+  {
+    name: 'Für Elise',
+    movie: 'Ludwig van Beethoven',
+    bpm: 130,
+    keys: ['E', 'D#', 'E', 'D#', 'E', 'B', 'D', 'C', 'A', ' ', 'C', 'E', 'A', 'B'],
+    notes: 'Classic Piano Masterpiece Für Elise by Beethoven',
+    rhythm: [
+      { key: 'E',  note: 'E5',  duration: 0.5, pauseAfter: 250 },
+      { key: 'D#', note: 'D#5', duration: 0.5, pauseAfter: 250 },
+      { key: 'E',  note: 'E5',  duration: 0.5, pauseAfter: 250 },
+      { key: 'D#', note: 'D#5', duration: 0.5, pauseAfter: 250 },
+      { key: 'E',  note: 'E5',  duration: 0.5, pauseAfter: 250 },
+      { key: 'B',  note: 'B4',  duration: 0.5, pauseAfter: 250 },
+      { key: 'D',  note: 'D5',  duration: 0.5, pauseAfter: 250 },
+      { key: 'C',  note: 'C5',  duration: 0.5, pauseAfter: 250 },
+      { key: 'A',  note: 'A4',  duration: 1.2, pauseAfter: 600 },
+      { key: ' ',  note: 'REST',duration: 0.0, pauseAfter: 400 },
+      { key: 'C',  note: 'C4',  duration: 0.5, pauseAfter: 250 },
+      { key: 'E',  note: 'E4',  duration: 0.5, pauseAfter: 250 },
+      { key: 'A',  note: 'A4',  duration: 0.5, pauseAfter: 250 },
+      { key: 'B',  note: 'B4',  duration: 1.2, pauseAfter: 600 },
+    ],
+  },
+  {
+    name: 'Interstellar Theme',
+    movie: 'Hans Zimmer',
+    bpm: 110,
+    keys: ['E', 'A', 'E', 'A', 'F', 'A', 'F', 'A', 'D', 'A', 'D', 'A'],
+    notes: 'Hans Zimmer Interstellar Main Theme - First Step',
+    rhythm: [
+      { key: 'E', note: 'E5', duration: 1.0, pauseAfter: 450 },
+      { key: 'A', note: 'A4', duration: 1.0, pauseAfter: 450 },
+      { key: 'E', note: 'E5', duration: 1.0, pauseAfter: 450 },
+      { key: 'A', note: 'A4', duration: 1.0, pauseAfter: 450 },
+      { key: 'F', note: 'F5', duration: 1.0, pauseAfter: 450 },
+      { key: 'A', note: 'A4', duration: 1.0, pauseAfter: 450 },
+      { key: 'F', note: 'F5', duration: 1.0, pauseAfter: 450 },
+      { key: 'A', note: 'A4', duration: 1.0, pauseAfter: 450 },
+      { key: 'D', note: 'D5', duration: 1.0, pauseAfter: 450 },
+      { key: 'A', note: 'A4', duration: 1.0, pauseAfter: 450 },
+    ],
+  },
+  {
+    name: 'Pirates of the Caribbean',
+    movie: 'Hans Zimmer',
+    bpm: 140,
+    keys: ['A', 'C', 'D', 'D', 'D', 'E', 'F', 'F', 'F', 'G', 'E', 'E', 'D', 'C', 'D'],
+    notes: "He's a Pirate - Pirates of the Caribbean Theme",
+    rhythm: [
+      { key: 'A', note: 'A4', duration: 0.4, pauseAfter: 200 },
+      { key: 'C', note: 'C5', duration: 0.4, pauseAfter: 200 },
+      { key: 'D', note: 'D5', duration: 0.8, pauseAfter: 350 },
+      { key: 'D', note: 'D5', duration: 0.4, pauseAfter: 200 },
+      { key: 'D', note: 'D5', duration: 0.4, pauseAfter: 200 },
+      { key: 'E', note: 'E5', duration: 0.4, pauseAfter: 200 },
+      { key: 'F', note: 'F5', duration: 0.8, pauseAfter: 350 },
+      { key: 'F', note: 'F5', duration: 0.4, pauseAfter: 200 },
+      { key: 'F', note: 'F5', duration: 0.4, pauseAfter: 200 },
+      { key: 'G', note: 'G5', duration: 0.4, pauseAfter: 200 },
+      { key: 'E', note: 'E5', duration: 0.8, pauseAfter: 350 },
+      { key: 'E', note: 'E5', duration: 0.4, pauseAfter: 200 },
+      { key: 'D', note: 'D5', duration: 0.4, pauseAfter: 200 },
+      { key: 'C', note: 'C5', duration: 0.4, pauseAfter: 200 },
+      { key: 'D', note: 'D5', duration: 1.2, pauseAfter: 600 },
     ],
   },
   {
@@ -157,14 +222,14 @@ export const HINDI_SONGS: HindiSongInfo[] = [
     keys: ['C', 'E', 'G', 'A', 'G', 'E', 'F', 'E', ' ', 'C', 'D', 'E', 'F', 'E', 'D', 'C'],
     notes: 'Lag jaa gale ke phir yeh haseen raat ho na ho...',
     rhythm: [
-      { key: 'C',  note: 'C4',  duration: 1.2, pauseAfter: 600 },  // Lag
-      { key: 'E',  note: 'E4',  duration: 1.0, pauseAfter: 500 },  // jaa
-      { key: 'G',  note: 'G4',  duration: 1.5, pauseAfter: 800 },  // ga-
-      { key: 'A',  note: 'A4',  duration: 0.8, pauseAfter: 400 },  // le
-      { key: 'G',  note: 'G4',  duration: 1.0, pauseAfter: 500 },  // ke
-      { key: 'E',  note: 'E4',  duration: 0.8, pauseAfter: 400 },  // phir
-      { key: 'F',  note: 'F4',  duration: 0.8, pauseAfter: 400 },  // haseen
-      { key: 'E',  note: 'E4',  duration: 1.8, pauseAfter: 1000 }, // raat ho na ho...
+      { key: 'C',  note: 'C4',  duration: 1.2, pauseAfter: 600 },
+      { key: 'E',  note: 'E4',  duration: 1.0, pauseAfter: 500 },
+      { key: 'G',  note: 'G4',  duration: 1.5, pauseAfter: 800 },
+      { key: 'A',  note: 'A4',  duration: 0.8, pauseAfter: 400 },
+      { key: 'G',  note: 'G4',  duration: 1.0, pauseAfter: 500 },
+      { key: 'E',  note: 'E4',  duration: 0.8, pauseAfter: 400 },
+      { key: 'F',  note: 'F4',  duration: 0.8, pauseAfter: 400 },
+      { key: 'E',  note: 'E4',  duration: 1.8, pauseAfter: 1000 },
     ],
   },
 ];
